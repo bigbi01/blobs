@@ -32,7 +32,6 @@
             this.Results = new System.Windows.Forms.Label();
             this.ButtonsPanel = new System.Windows.Forms.TableLayoutPanel();
             this.CEButton = new System.Windows.Forms.Button();
-            this.CButton = new System.Windows.Forms.Button();
             this.DeleteButton = new System.Windows.Forms.Button();
             this.DivBouton = new System.Windows.Forms.Button();
             this.Btn7 = new System.Windows.Forms.Button();
@@ -83,7 +82,6 @@
             this.ButtonsPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.ButtonsPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.ButtonsPanel.Controls.Add(this.CEButton, 0, 0);
-            this.ButtonsPanel.Controls.Add(this.CButton, 1, 0);
             this.ButtonsPanel.Controls.Add(this.DeleteButton, 2, 0);
             this.ButtonsPanel.Controls.Add(this.DivBouton, 3, 0);
             this.ButtonsPanel.Controls.Add(this.Btn7, 0, 1);
@@ -123,17 +121,6 @@
             this.CEButton.Text = "CE";
             this.CEButton.UseVisualStyleBackColor = true;
             this.CEButton.Click += new System.EventHandler(this.CEButton_Click);
-            // 
-            // CButton
-            // 
-            this.CButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.CButton.Location = new System.Drawing.Point(161, 3);
-            this.CButton.Name = "CButton";
-            this.CButton.Size = new System.Drawing.Size(152, 80);
-            this.CButton.TabIndex = 1;
-            this.CButton.Text = "C";
-            this.CButton.UseVisualStyleBackColor = true;
-            this.CButton.Click += new System.EventHandler(this.CButton_Click);
             // 
             // DeleteButton
             // 
@@ -346,7 +333,6 @@
         private System.Windows.Forms.Label Results;
         private System.Windows.Forms.TableLayoutPanel ButtonsPanel;
         private System.Windows.Forms.Button CEButton;
-        private System.Windows.Forms.Button CButton;
         private System.Windows.Forms.Button DeleteButton;
         private System.Windows.Forms.Button DivBouton;
         private System.Windows.Forms.Button Btn7;

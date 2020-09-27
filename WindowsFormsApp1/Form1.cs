@@ -35,11 +35,6 @@ namespace WindowsFormsApp1
             this.UserInput.Focus();
         }
 
-        private void CButton_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void DeleteButton_Click(object sender, EventArgs e)
         {
             if (this.UserInput.Text.Length >= this.UserInput.SelectionStart + 1)
@@ -125,6 +120,7 @@ namespace WindowsFormsApp1
         private void BtnEgale_Click(object sender, EventArgs e)
         {
             this.UserInput.Focus();
+            Calculate();
         }
 
 
@@ -152,7 +148,136 @@ namespace WindowsFormsApp1
 
         private void Calculate()
         {
+            var userInput = UserInput.Text;
+            Results.Text = ParseOperation();
+        }
+        /// <summary>
+        /// Parses the users equation and calculates the results
+        /// </summary>
+        /// <returns></returns>
+        private string ParseOperation()
+        {
+            try
+            {
+                var userInput = UserInput.Text;
+                userInput = userInput.Replace(" ", "");
+                var operation = new Operation();
+                var leftSide = true;
 
+                for(int i=0; i < userInput.Length; i++)
+                {
+
+                    if ("0123456789.".Contains(userInput[i]))
+                    {
+                        
+                        if (leftSide)
+                        {
+                            operation.LeftSide = AddNumberPart(operation.LeftSide, userInput[i]);
+                        }
+                        else
+                        {
+                            operation.RightSide = AddNumberPart(operation.RightSide, userInput[i]);
+                        }
+                    }else if ("+-*/xX".Contains(userInput[i]))
+                    {
+                        if (!leftSide)
+                        {
+                            var operatorType = GetOperationType(userInput[i]);
+                        }
+                        else
+                        {
+                            var operatorType = GetOperationType(userInput[i]);
+                            if (operation.LeftSide.Length == 0)
+                            {
+                                if (operatorType != OperationsType.Minus)
+                                    throw new InvalidOperationException($"Operator + * / or more than one -) specified without an left side number");
+                                operation.LeftSide += userInput[i];
+
+                            }
+                            else
+                            {
+                                operation.OperationsType = operatorType;
+                                leftSide = false;
+                            }
+                        }
+                    }
+                }
+
+                return CalculateOperation(operation);
+                
+            }
+            catch (Exception e)
+            {
+                return $"invalid equation. {e.Message}";
+            }
+        }
+
+        private string CalculateOperation(Operation operation)
+        {
+            double leftside = 0;
+            double rightside = 0;
+
+            if (string.IsNullOrEmpty(operation.LeftSide) || !double.TryParse(operation.LeftSide, out leftside))
+                throw new InvalidOperationException($"Left Side of the operation was not a number. {operation}");
+
+            if (string.IsNullOrEmpty(operation.RightSide) || !double.TryParse(operation.RightSide, out rightside))
+                throw new InvalidOperationException($"Right Side of the operation was not a number. {operation}");
+
+            try
+            {
+                switch (operation.OperationsType)
+                {
+                    case OperationsType.Add:
+                        return (leftside + rightside).ToString();
+                    case OperationsType.Minus:
+                        return (leftside - rightside).ToString();
+                    case OperationsType.Divide:
+                        return ((int)leftside / (int)rightside).ToString();
+                    case OperationsType.Multiply:
+                        return (leftside * rightside).ToString();
+                    default:
+                        throw new InvalidOperationException($"Unknown operator type when calculating operation. {operation.OperationsType}");
+                }
+            }catch(Exception ex)
+            {
+                throw new InvalidOperationException($"Failed to calculate operation {operation.LeftSide} {operation.OperationsType} {operation.RightSide}. {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// accepts a character and return the known <see cref="OperationsType"/>
+        /// </summary>
+        /// <param name="character"></param>
+        /// <returns></returns>
+
+        private OperationsType GetOperationType(char character)
+        {
+            switch (character)
+            {
+                case '+':
+                    return OperationsType.Add;
+                case '-':
+                    return OperationsType.Minus;
+                case '/':
+                    return OperationsType.Divide;
+                case '*':
+                    return OperationsType.Multiply;
+                case 'x':
+                    return OperationsType.Multiply;
+                case 'X':
+                    return OperationsType.Multiply;
+                default:
+                    throw new InvalidOperationException($"unknown operator type {character}");
+            }
+        }
+        private string AddNumberPart(string currNumber, char newChar)
+        {
+            if(newChar == '.' && currNumber.Contains('.'))
+            {
+                throw new InvalidOperationException($"Number {currNumber} already contains a . and another cannot be added");
+            }
+
+            return currNumber+newChar;
         }
         #endregion
     }
